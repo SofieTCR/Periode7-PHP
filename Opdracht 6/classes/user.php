@@ -13,7 +13,7 @@
         private static $db;
         
         public function __construct() {
-            self::$db = new Database("localhost", "root", "login", "");
+            self::$db = new Database("localhost", "login", "root", "");
         }
 
         function SetPassword($password){
@@ -35,12 +35,18 @@
             if($this->username != "" || $this->password != ""){
 
                 // Check user exist
-                if(true){
+                $query = "SELECT username FROM users WHERE username = ?;";
+                $params = array($this->username);
+
+                $result = self::$db->executeQuery($query, $params);
+
+                if($result->rowCount() != 0){
                     array_push($errors, "Username bestaat al.");
                 } else {
-                    // username opslaan in tabel login
-                    // INSERT INTO `user` (`username`, `password`, `role`) VALUES ('kjhasdasdkjhsak', 'asdasdasdasdas', '');
-                    // Manier 1
+                    $query = "INSERT INTO `users` (`username`, `password`, `role`) VALUES (?, ?, ?);";
+                    $params = array($this->username, password_hash($this->password, PASSWORD_DEFAULT), "");
+
+                    $result = self::$db->executeQuery($query, $params);
                     
                     $status = true;
                 }
@@ -50,71 +56,91 @@
             return $errors;
         }
 
-        function ValidateUser(){
-            $errors=[];
-
-            if (empty($this->username)){
-                array_push($errors, "Invalid username");
-            } else if (empty($this->password)){
-                array_push($errors, "Invalid password");
-            }
-            if (strlen($this->username) <= 3) {
-                array_push($errors, "Username too short");
-            } else if (strlen($this->username) > 50) {
-                array_push($errors, "Username too long");
-            }
+        function ValidateUser() {
+            $errors = $this->ValidateUsername();
 
             if (empty($errors)) {
-                $query = "SELECT username FROM users WHERE username = ? AND password = ?";
-                $params = array($this->username, password_hash($this->password));
+                $query = "SELECT password FROM users WHERE username = ?;";
+                $params = array($this->username);
 
-                $result = self::$db.executeQuery($query, $params);
+                $result = self::$db->executeQuery($query, $params);
 
-                echo($result->fetch(PDO::FETCH_ASSOC));
+                if ($result->rowCount() == 0) {
+                    array_push($errors, "Invalid username");
+                }
+                else if (!password_verify($this->password, $result->fetch(PDO::FETCH_ASSOC)["password"]))
+                {
+                    array_push($errors, "Invalid password");
+                }
             }
             
             return $errors;
         }
 
-        public function LoginUser(){
+        function ValidateUsername() {
+            $errors=[];
+            
+            if (strlen($this->username) < 3) {
+                array_push($errors, "Username too short");
+            } else if (strlen($this->username) > 50) {
+                array_push($errors, "Username too long");
+            }
 
-            // Connect database
+            return $errors;
+        }
 
-            // Zoek user in de table user
-           echo "Username:" . $this->username;
+        public function LoginUser()
+        {
+            // Check user exist
+            $query = "SELECT username FROM users WHERE username = ?;";
+            $params = array($this->username);
 
-
-            // Indien gevonden dan sessie vullen
-
-
-            return true;
+            $result = self::$db->executeQuery($query, $params);
+            if($result->rowCount() != 0) {
+                if (session_status() !== PHP_SESSION_ACTIVE) {
+                    // Start the session
+                    session_start();
+                }
+                $_SESSION['username'] = $this->username;
+                return true;
+            }
+            return false;
         }
 
         // Check if the user is already logged in
         public function IsLoggedin() {
             // Check if user session has been set
-            
-            return false;
+            if (session_status() !== PHP_SESSION_ACTIVE) {
+                // Start the session
+                session_start();
+            }
+            return isset($_SESSION['username']);
         }
 
-        public function GetUser($username){
+        public function GetUser($username) {
             
-		    // Doe SELECT * from user WHERE username = $username
-            if (false){
+		    // Check user exist
+            $query = "SELECT username FROM users WHERE username = ?;";
+            $params = array($_SESSION['username']);
+
+            $result = self::$db->executeQuery($query, $params);
+            if($result->rowCount() != 0) {
                 //Indien gevonden eigenschappen vullen met waarden uit de SELECT
-                $this->username = 'Waarde uit de database';
+                $this->username = $result->fetch(PDO::FETCH_ASSOC)["username"];
             } else {
-                return NULL;
+                Logout();
             }   
         }
 
-        public function Logout(){
-            session_start();
-            // remove all session variables
-           
-
-            // destroy the session
+        public function Logout() {
+            if (session_status() !== PHP_SESSION_ACTIVE) {
+                // Start the session
+                session_start();
+            }
             
+            session_unset();
+            session_destroy();
+
             header('location: index.php');
         }
 
