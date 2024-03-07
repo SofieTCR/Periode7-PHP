@@ -1,6 +1,7 @@
 <?php
     // Functie: classdefinitie User 
     // Auteur: Wigmans
+    require_once 'classes/Database.php';
 
     class User{
 
@@ -8,7 +9,13 @@
         public $username;
         public $email;
         private $password;
+        public $role;
+        private static $db;
         
+        public function __construct() {
+            self::$db = new Database("localhost", "root", "login", "");
+        }
+
         function SetPassword($password){
             $this->password = $password;
         }
@@ -51,8 +58,20 @@
             } else if (empty($this->password)){
                 array_push($errors, "Invalid password");
             }
+            if (strlen($this->username) <= 3) {
+                array_push($errors, "Username too short");
+            } else if (strlen($this->username) > 50) {
+                array_push($errors, "Username too long");
+            }
 
-            // Test username > 3 tekens en < 50 tekens
+            if (empty($errors)) {
+                $query = "SELECT username FROM users WHERE username = ? AND password = ?";
+                $params = array($this->username, password_hash($this->password));
+
+                $result = self::$db.executeQuery($query, $params);
+
+                echo($result->fetch(PDO::FETCH_ASSOC));
+            }
             
             return $errors;
         }
