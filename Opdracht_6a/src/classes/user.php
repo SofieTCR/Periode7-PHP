@@ -1,7 +1,10 @@
 <?php
     // Functie: classdefinitie User 
     // Auteur: Wigmans
-    require_once 'classes/Database.php';
+    namespace Opdracht6a\classes;
+    
+    use Opdracht6a\classes\Database;
+    use PDO;
 
     class User{
 

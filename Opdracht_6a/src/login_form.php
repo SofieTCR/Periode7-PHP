@@ -1,4 +1,7 @@
 <?php
+    require_once '../vendor/autoload.php';
+
+    use Opdracht6a\classes\User;
 	
 	// Is de login button aangeklikt?
 	if(isset($_POST['login-btn']) ){

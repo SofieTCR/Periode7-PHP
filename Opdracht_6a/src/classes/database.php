@@ -1,5 +1,10 @@
 <?php
 
+namespace Opdracht6a\classes;
+
+use PDO;
+use PDOExecption;
+
 class Database {
     private $pdo;
     private $host;
