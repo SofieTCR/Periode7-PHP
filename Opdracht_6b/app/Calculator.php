@@ -3,7 +3,7 @@ namespace VoorbeeldUnittest;
 class Calculator
 {
    public function nummerDrie($str){
-      return  substr($str, 0,4)."...". substr($str, -3);
+      return  substr($str, 0,3)."...". substr($str, -3);
    }
 
    public function nummerCheck($str){
