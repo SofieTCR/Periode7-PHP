@@ -1,0 +1,11 @@
+{
+    "name": "sofie/opdracht_7",
+    "require": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Opdracht7\\": "src/"
+        }
+    }
+}
