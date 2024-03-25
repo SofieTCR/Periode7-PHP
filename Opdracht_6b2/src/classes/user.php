@@ -132,7 +132,7 @@
                 $this->username = $result->fetch(PDO::FETCH_ASSOC)["username"];
                 return true;
             } else {
-                Logout();
+                $this->Logout();
             }   
         }
 

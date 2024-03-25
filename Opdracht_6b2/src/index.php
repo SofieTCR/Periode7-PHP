@@ -41,7 +41,7 @@
 	} else {
 		
 		// select userdata from database
-		$user->GetUser($user->username);
+		$user->GetUser($_SESSION['username']);
 		
 		// Print userdata
 		echo "<h2>Het spel kan beginnen</h2>";
