@@ -3,7 +3,7 @@
         'name' => 'sofie/opdracht_8',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'ab03b5c9dc258f80f9ddf17d95e8e44606dcd3ac',
+        'reference' => 'f0f89c41005ac7d7009e6217402ef9612b60dfac',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -238,7 +238,7 @@
         'sofie/opdracht_8' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'ab03b5c9dc258f80f9ddf17d95e8e44606dcd3ac',
+            'reference' => 'f0f89c41005ac7d7009e6217402ef9612b60dfac',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

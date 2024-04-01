@@ -2,7 +2,7 @@
     namespace Opdracht8\classes;
 
     class Dice {
-        private static int $numberSides;
+        private static int $numberSides = 6;
         private static array $dotPositions = [
             [],
             [[75, 75]],
@@ -29,10 +29,6 @@
 
         private int $faceValue = 0;
 
-        public static function setNumberSides(int $pNumberSides) {
-            self::$numberSides = $pNumberSides;
-        }
-
         public function rollDice() {
             $this->faceValue = random_int(1, self::$numberSides);
         }
@@ -41,10 +37,18 @@
             return $this->faceValue;
         }
 
-        public function getFaceSVG(int $pSize = 100) {
+        public static function setNumberSides(int $pNumberSides) {
+            self::$numberSides = $pNumberSides;
+        }
+
+        public static function getNumberSides() {
+            return self::$numberSides;
+        }
+
+        public static function getFaceSVG(int $pNumber, int $pSize = 100) {
             $returnString = '<svg xmlns="http://www.w3.org/2000/svg" width="' . $pSize . '" height="' . $pSize . '" style="border: 1px solid black;" viewBox="0 0 150 150">';
 
-            foreach (self::$dotPositions[$this->faceValue] as $position) {
+            foreach (self::$dotPositions[$pNumber] as $position) {
                 $x = $position[0];
                 $y = $position[1];
                 $returnString .= '<circle cx="'.$x.'" cy="'.$y.'" r="7.5" fill="black"/>';
