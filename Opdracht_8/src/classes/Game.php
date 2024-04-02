@@ -27,7 +27,7 @@
             $this->updateHighscore();
             $this->isActive = false;
             $this->score = 0;
-            $this->lastScore = 0;
+            $this->lastTotal = 0;
         }
 
         public function rollDice() {
